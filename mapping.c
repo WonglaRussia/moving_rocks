@@ -1,7 +1,7 @@
 /* mapping.c */
 #include <ncurses.h>
 #include "mapping.h"
-
+#include "maps.h"
 void remove_char(int y, int x){
   move(y, x);
   addch(' ');
