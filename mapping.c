@@ -4,7 +4,8 @@
 
 #include <ncurses.h>
 #include "mapping.h"
-#include "maps.h"
+#include "maps.h"		// extern int map[MAP_ROWS][MAP_ROWS];
+#include "rocks.h" 		// extern signed long int *score;
 
 void remove_char(int y, int x){
   move(y, x);
@@ -55,14 +56,17 @@ int move_the_object(int map[][MAP_ROWS],int *old_row, int *old_col, int delta_ro
   if(destination == HOLE){
 	if(figure == USE_R)
 		game_over();
-	else if (figure == ROCK)
+	else if (figure == ROCK) 
+	{
+		add_score();
 		figure = LOCK_ROCK;
+	}
   }
   
   map[new_row][new_col] = figure;					//place the figure to the destination
   map[*old_row][*old_col] = SPACE;					//place the SPACE to the previous place
   
-  if(figure == USE_R) {								//relocate the user in globap program
+  if(figure == USE_R) {								//relocate the user in global program
    *old_row = new_row;								//REWRITE
    *old_col = new_col;
   }
@@ -97,4 +101,31 @@ void find_the_user(int map[][MAP_ROWS], int *user__y, int *user__x) //returns th
   printw("CANT FIND THE USER! MAP is incorrect");	//theri is no any user on the map
   getch();											//REWRITE
   return;
+}
+
+void add_score()
+{
+	extern int *score;
+	*score += 40;
+	return;
+}
+
+void show_the_top(void)
+{
+	extern int *score;
+	int max_x, y, x;
+	max_x = getmaxx(stdscr);
+	
+	for(y = 0 ; y < 3; y++){
+	  for(x = 0 ; x < max_x; x++){
+	    if ( y == 0 || y == 3 || x == 0 || (x == (max_x - 1)) )
+		{
+		  move(y, x);
+		  addch('#');
+		}
+	  }
+	}
+    move(2, (max_x / 2) - 5);
+	printw("SCORE:%d", *score);
+	return;
 }

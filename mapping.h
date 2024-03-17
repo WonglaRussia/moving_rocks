@@ -16,7 +16,8 @@ void game_over(void);
 int move_the_object(int map[][MAP_ROWS],int *old_row, int *old_col, int delta_row, int delta_col);
 int check_the_result(int map[][MAP_ROWS]);
 void find_the_user(int map[][MAP_ROWS], int *user_map_y, int *user_map_x);
-
+void add_score();
+void show_the_top(void);
 #endif
 
 

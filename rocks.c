@@ -3,6 +3,9 @@
 #include "mapping.h"
 #include "maps.h"
 
+int *score;
+*score = 40;
+
 int main() {
 
 initscr();
@@ -10,11 +13,10 @@ keypad(stdscr, 1);
 curs_set(0);
 int row, col, act, user_map_y, user_map_x;
 
+
 row = col = 0;				
-//user_map_y = 6;						//REWRITE TAKE POSITITION from the file with maps
-//user_map_x = 6;
-find_the_user(map, &user_map_y, &user_map_x);
-//map[user_map_y][user_map_x] = USE_R;
+
+find_the_user(map, &user_map_y, &user_map_x); //define the user coordinates
 show_the_map( map, (sizeof(map) / sizeof(map[0])), (sizeof(map[0]) /sizeof(map[0][0])) );  
 do {  
   act = getch(); 
@@ -39,11 +41,16 @@ do {
   default: break;
   }
   clear();
+  //show_the_top();
   show_the_map( map, (sizeof(map) / sizeof(map[0])), (sizeof(map[0]) /sizeof(map[0][0])) );
   refresh();
-  check_the_result(map);			//if no free rocks you won
+  //if (check_the_result(map) == 200)			//if no free rocks you won
+  {											// REWRITE go to the next map
+    ;
+  }
  } 
 while(act != 'q');
+
 endwin();
 return 0;
 }

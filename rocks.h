@@ -1,5 +1,5 @@
 /* rocks.h */
-#ifndef MAPPING_H
-#define MAPPING_H
-
+#ifndef ROCKS_H
+#define ROCKS_H
+//extern signed long int *score;
 #endif
