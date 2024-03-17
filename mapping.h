@@ -2,7 +2,7 @@
 #ifndef MAPPING_H
 #define MAPPING_H
 
-#define MAP_ROWS 10
+#define MAP_ROWS 13
 #define ROCK 35
 #define LOCK_ROCK 36
 #define USER 64
