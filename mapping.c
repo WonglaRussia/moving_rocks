@@ -1,17 +1,31 @@
 /* mapping.c */
 
-//Few functions working with the map and objects on it.
+//Few functions working with the map screen and objects on it.
 
 #include <ncurses.h>
 #include "mapping.h"
 #include "maps.h"		// extern int map[MAP_ROWS][MAP_ROWS];
-#include "rocks.h" 		// extern signed long int *score;
+#include "rocks.h" 		// void add_score(int addition)
 
 void remove_char(int y, int x){
   move(y, x);
   addch(' ');
   refresh();
   return;
+}
+
+						//If you clear the window every cycle it is too blinking
+						//Lets clear it only if window size is changed.
+void clear_the_screen(int *current_size_y, int *current_size_x)
+{
+	int y,x;
+	getmaxyx(stdscr, y, x);
+	if(y == (*current_size_y) && x == *current_size_x)
+		return;
+	*current_size_y = y;
+	*current_size_x = x;
+	clear();
+	return;
 }
 
 void show_the_map(int map[][MAP_ROWS], int max_map_row, int max_map_col){
@@ -58,7 +72,7 @@ int move_the_object(int map[][MAP_ROWS],int *old_row, int *old_col, int delta_ro
 		game_over();
 	else if (figure == ROCK) 
 	{
-		add_score();
+		//add_score(40);
 		figure = LOCK_ROCK;
 	}
   }
@@ -103,14 +117,7 @@ void find_the_user(int map[][MAP_ROWS], int *user__y, int *user__x) //returns th
   return;
 }
 
-void add_score()
-{
-	extern int *score;
-	*score += 40;
-	return;
-}
-
-void show_the_top(void)
+/* void show_the_top(void)
 {
 	extern int *score;
 	int max_x, y, x;
@@ -129,3 +136,4 @@ void show_the_top(void)
 	printw("SCORE:%d", *score);
 	return;
 }
+*/

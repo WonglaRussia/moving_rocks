@@ -3,22 +3,30 @@
 #include "mapping.h"
 #include "maps.h"
 
+
 int *score;
-*score = 40;
+
+void add_score(int addition)
+{
+	*score += addition;
+	return;
+}
 
 int main() {
-
+//int *score;
+//*score = 40;
 initscr();
 keypad(stdscr, 1);
 curs_set(0);
 int row, col, act, user_map_y, user_map_x;
-
 
 row = col = 0;				
 
 find_the_user(map, &user_map_y, &user_map_x); //define the user coordinates
 show_the_map( map, (sizeof(map) / sizeof(map[0])), (sizeof(map[0]) /sizeof(map[0][0])) );  
 do {  
+  int current_size_y; int current_size_x; 		// for fuction clearing screen while changing size
+
   act = getch(); 
   remove_char(row, col);  
   switch(act){
@@ -40,7 +48,8 @@ do {
   }
   default: break;
   }
-  clear();
+  
+  clear_the_screen( &current_size_y, &current_size_x );
   //show_the_top();
   show_the_map( map, (sizeof(map) / sizeof(map[0])), (sizeof(map[0]) /sizeof(map[0][0])) );
   refresh();
@@ -54,3 +63,4 @@ while(act != 'q');
 endwin();
 return 0;
 }
+
