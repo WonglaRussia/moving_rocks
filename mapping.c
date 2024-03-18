@@ -1,36 +1,29 @@
 /* mapping.c */
 
-//Few functions working with the map screen and objects on it.
+//Few functions working with the map the screen and objects on it.
 
 #include <ncurses.h>
 #include "mapping.h"
 #include "maps.h"		// extern int map[MAP_ROWS][MAP_ROWS];
 #include "rocks.h" 		// void add_score(int addition)
 
-void remove_char(int y, int x){
+/*void remove_char(int y, int x){
   move(y, x);
   addch(' ');
   refresh();
   return;
-}
+}*/
 
-						//If you clear the window every cycle it is too blinking
-						//Lets clear it only if window size is changed.
-void clear_the_screen(int *current_size_y, int *current_size_x)
-{
-	int y,x;
-	getmaxyx(stdscr, y, x);
-	if(y == (*current_size_y) && x == *current_size_x)
-		return;
-	*current_size_y = y;
-	*current_size_x = x;
+void game_over(void) {
 	clear();
+	printw("GAME OVER");
+	getch();
 	return;
 }
 
 void show_the_map(int map[][MAP_ROWS], int max_map_row, int max_map_col){
 	int x, y, ch, start_row, start_col;
-	getmaxyx(stdscr, start_row, start_col);
+	getmaxyx(stdscr, start_row, start_col);			//REWRITE? examine size when KEY_RESIZE?
 	start_row = start_row / 2 - max_map_row / 2;    //right-upper corner
 	start_col = start_col / 2 - max_map_col / 2;
 	for(y = 0 ; y < max_map_row; y++){
@@ -43,14 +36,7 @@ void show_the_map(int map[][MAP_ROWS], int max_map_row, int max_map_col){
 	move(0,0);
 	return;
 }
-
-void game_over(void) {
-	clear();
-	printw("GAME OVER");
-	getch();
-	return;
-}
-
+						//rename to play_the_move? (REWRITE)
 int move_the_object(int map[][MAP_ROWS],int *old_row, int *old_col, int delta_row, int delta_col)
 {
   int figure, destination, new_row, new_col;		//look what do we try to move (figure) and where (destination)
@@ -72,7 +58,7 @@ int move_the_object(int map[][MAP_ROWS],int *old_row, int *old_col, int delta_ro
 		game_over();
 	else if (figure == ROCK) 
 	{
-		//add_score(40);
+		add_score(SCORE_SUM_FOR_ROCK);
 		figure = LOCK_ROCK;
 	}
   }
@@ -116,24 +102,23 @@ void find_the_user(int map[][MAP_ROWS], int *user__y, int *user__x) //returns th
   getch();											//REWRITE
   return;
 }
-
-/* void show_the_top(void)
+						//shows fringed the header with score
+void show_the_top(void)
 {
-	extern int *score;
+
 	int max_x, y, x;
 	max_x = getmaxx(stdscr);
 	
 	for(y = 0 ; y < 3; y++){
 	  for(x = 0 ; x < max_x; x++){
-	    if ( y == 0 || y == 3 || x == 0 || (x == (max_x - 1)) )
+	    if ( y == 0 || y == 2 || x == 0 || (x == (max_x - 1)) )
 		{
 		  move(y, x);
 		  addch('#');
 		}
 	  }
 	}
-    move(2, (max_x / 2) - 5);
-	printw("SCORE:%d", *score);
+    move(1, (max_x / 2) - 5);
+	printw("SCORE:%d", score);
 	return;
 }
-*/

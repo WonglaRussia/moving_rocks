@@ -9,6 +9,7 @@
 #define WA_L 178
 #define HOLE 79
 #define SPACE 32
+#define SCORE_SUM_FOR_ROCK 40
 
 void remove_char(int y, int x);
 void clear_the_screen(int *current_size_y, int *current_size_x);
@@ -18,7 +19,7 @@ int move_the_object(int map[][MAP_ROWS],int *old_row, int *old_col, int delta_ro
 int check_the_result(int map[][MAP_ROWS]);
 void find_the_user(int map[][MAP_ROWS], int *user_map_y, int *user_map_x);
 void add_score();
-//void show_the_top(void);
+void show_the_top(void);
 #endif
 
 
