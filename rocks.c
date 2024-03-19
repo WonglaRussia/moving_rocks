@@ -3,9 +3,9 @@
 #include "mapping.h"	//show_the_top find_the_user
 #include "maps.h"		//extern int current_map[MAP_ROWS][MAP_ROWS];
 
-char work_bw;
 
 int score;
+
 void add_score(int addition)
 {
 	extern int score;
@@ -14,7 +14,7 @@ void add_score(int addition)
 }
 //Copy to the "map" from "current map" (to make reading map files).
 //REWRITE map in files!
-int copy_map(int map[][MAP_ROWS], int stash_map[][MAP_ROWS])
+static int copy_map(int map[][MAP_ROWS], int stash_map[][MAP_ROWS])
 {
 	int y, x;
 	for(y = 0; y < MAP_ROWS; y++){
@@ -80,15 +80,4 @@ int play_the_map(int current_map[][MAP_ROWS])
 return 0;
 }
 
-int main() {
-score = 40;
-
-initscr();
-work_bw = !has_colors();						//REWRITE all screen functions
-keypad(stdscr, 1); 								//esc seq for moving by arrows
-curs_set(0);
-play_the_map(current_map);
-endwin();
-return 0;
-}
 
