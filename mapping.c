@@ -52,10 +52,12 @@ int move_the_object(int map[][MAP_ROWS],int *old_row, int *old_col, int delta_ro
   if(destination == ROCK) {
 	if (move_the_object(map, &new_row, &new_col, delta_row, delta_col) == 100) //try to move the next rock (destination coordinates)
 	  return 100;									//the very next rock is immovable
-  }												//do not move any object exit
+  }													//do not move any object exit
   if(destination == HOLE){
-	if(figure == USE_R)
+	if(figure == USE_R){
 		game_over();
+		return 200;
+	}
 	else if (figure == ROCK) 
 	{
 		add_score(SCORE_SUM_FOR_ROCK);
@@ -84,7 +86,7 @@ int check_the_result(int map[][MAP_ROWS])  //REWRITE add checking uneven number 
   clear();
   printw("YOU WIN!");				//theri is no any hole
   getch();							//REWRITE
-  return 0;
+  return 100;
 }
 
 void find_the_user(int map[][MAP_ROWS], int *user__y, int *user__x) //returns the user location
