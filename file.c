@@ -23,7 +23,7 @@ int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 	return 0;
 }
 
-int extract_map(int current_map[][MAP_ROWS]; char *file_name; int *round_number)
+int extract_map(int current_map[][MAP_ROWS], char *file_name, int *round_number)
 {
 	FILE *f;
 	if(!f){

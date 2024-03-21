@@ -25,7 +25,8 @@ int main() {
 	work_bw = !has_colors();						//REWRITE all screen functions
 	keypad(stdscr, 1); 								//esc seq for moving by arrows
 	curs_set(0);
-	for(*round_number = 1; extract_map(current_map, filename_with_maps, round_number) ; *round_number++) {
+	*round_number = 1;
+	for(; extract_map(current_map, filename_with_maps, round_number) ; *round_number++) {
 		play_the_map(current_map);
 	}
 	endwin();
