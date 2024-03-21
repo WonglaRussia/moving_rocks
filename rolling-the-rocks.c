@@ -15,18 +15,18 @@ char work_bw;							//b&w terminal?
 int main() {
 //WRITE writing the map to file
 //WRITE reading the map from the file
-	int *round_number;					//to calculate offcet if the file while reading the map
+	int round;							//to calculate offcet if the file while reading the map
 	char filename_with_maps[] = FILE_N_MAPS;					//set the filename [1, infinity]
-	
-	
+	int current_map[MAP_ROWS][MAP_ROWS];
 	score = 40;
-	//append_map_to_the_file(current_map, filename_with_maps); 	//append the map to the file
+	//append_map_to_the_file(old_current_map, filename_with_maps); 	//append the map to the file
 	initscr();
 	work_bw = !has_colors();						//REWRITE all screen functions
 	keypad(stdscr, 1); 								//esc seq for moving by arrows
 	curs_set(0);
-	*round_number = 1;
-	for(; extract_map(current_map, filename_with_maps, round_number) ; *round_number++) {
+	
+	for(round = 1; extract_map(current_map, filename_with_maps, round) ; round++)
+	{
 		play_the_map(current_map);
 	}
 	endwin();

@@ -67,5 +67,3 @@ int play_the_map(int current_map[][MAP_ROWS])
 	while(act != 'q');
 return 0;
 }
-
-
