@@ -21,7 +21,21 @@ void game_over(void) {
 	return;
 }
 
-void show_the_map(int map[][MAP_ROWS], int max_map_row, int max_map_col){
+//Copy to the "map" from "current map" (to make reading map files).
+//REWRITE map in files!
+int copy_map(int map[][MAP_ROWS], int stash_map[][MAP_ROWS])
+{
+	int y, x;
+	for(y = 0; y < MAP_ROWS; y++){
+		for(x=0; x < MAP_ROWS; x++){
+			map[y][x] = stash_map[y][x];
+		}
+	}
+	return 0;
+}
+
+void show_the_map(int map[][MAP_ROWS], int max_map_row, int max_map_col)
+{
 	int x, y, ch, start_row, start_col;
 	getmaxyx(stdscr, start_row, start_col);			//REWRITE? examine size when KEY_RESIZE?
 	start_row = start_row / 2 - max_map_row / 2;    //right-upper corner

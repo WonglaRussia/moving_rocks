@@ -12,22 +12,10 @@ void add_score(int addition)
 	score += addition;
 	return;
 }
-//Copy to the "map" from "current map" (to make reading map files).
-//REWRITE map in files!
-static int copy_map(int map[][MAP_ROWS], int stash_map[][MAP_ROWS])
-{
-	int y, x;
-	for(y = 0; y < MAP_ROWS; y++){
-		for(x=0; x < MAP_ROWS; x++){
-			map[y][x] = stash_map[y][x];
-		}
-	}
-	return 0;
-}
 
 int play_the_map(int current_map[][MAP_ROWS])
 {	
-	int  act, user_map_y, user_map_x;				//"user_map" - coord of the user
+	int act, user_map_y, user_map_x;				//"user_map" - coord of the user
 	int map[MAP_ROWS][MAP_ROWS];					//temporal map for playing
 	
 	copy_map(map, current_map);						//now do not use (change) the current map
