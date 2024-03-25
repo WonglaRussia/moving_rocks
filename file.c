@@ -2,10 +2,32 @@
 #include <stdio.h>			//fputc() fgetc()
 #include <stdlib.h>			//exit()
 #include <errno.h>			//perror()
+#include <sys/stat.h>
 #include "mapping.h"		//define MAP_ROWS
+
+
+int open_file(const char *name) {
+	int descriptor;
+	
+	umask(0002);
+	descriptor = open(name, O_RDWR | O_CREAT | O_APPEND, 0666);
+	if (descriptor == -1 ) {
+		perror("file");
+		exit(1);
+	}
+	else
+		return descriptor;
+}
 
 int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 {
+	int file_descriptor;
+	
+	file_descriptor = open_file(const char file_name);
+	write(file_descriptor,current_map, sizeof(current_map));
+	close(file_descriptor);
+	return 0;
+	/* 
 	FILE *f;
 	f = fopen(file_name, "ab");
 	if(!f){
@@ -16,14 +38,13 @@ int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 	for(y = 0; y < MAP_ROWS; y++){
 	  for(x=0; x < MAP_ROWS; x++){
 		fputc(current_map[y][x] , f);
-		fputc(0 , f);
-		fputc(0 , f);
-		fputc(0 , f);
 	  }
 	}
 	fflush(f);
 	fclose(f);
 	return 0;
+	*/
+	
 }
 
 int extract_map(int current_map[][MAP_ROWS], char *file_name, const int round_number)

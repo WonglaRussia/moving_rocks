@@ -18,8 +18,11 @@ int main() {
 	int round;							//to calculate offcet if the file while reading the map
 	char filename_with_maps[] = FILE_N_MAPS;					//set the filename [1, infinity]
 	int current_map[MAP_ROWS][MAP_ROWS];
+	
 	score = 40;
-	//append_map_to_the_file(old_current_map, filename_with_maps); 	//append the map to the file
+	
+    append_map_to_the_file(old_current_map, filename_with_maps); 	//append the map to the file
+	
 	initscr();
 	work_bw = !has_colors();						//REWRITE all screen functions
 	keypad(stdscr, 1); 								//esc seq for moving by arrows
