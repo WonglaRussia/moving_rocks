@@ -17,7 +17,7 @@ int play_the_map(int current_map[][MAP_ROWS])
 {	
 	int act, user_map_y, user_map_x;				//"user_map" - coord of the user
 	int map[MAP_ROWS][MAP_ROWS];					//temporal map for playing
-	
+	 
 	copy_map(map, current_map);						//now do not use (change) the current map
 	find_the_user(map, &user_map_y, &user_map_x); 	//define the user coordinates
 	show_the_top();
