@@ -1,4 +1,4 @@
-/* rocks.c */
+/* round.c */
 #include <ncurses.h>
 #include "mapping.h"	//show_the_top find_the_user
 #include "maps.h"		//extern int current_map[MAP_ROWS][MAP_ROWS];

@@ -5,7 +5,7 @@
 #include <ncurses.h>
 #include "mapping.h"
 #include "maps.h"		// extern int map[MAP_ROWS][MAP_ROWS];
-#include "rocks.h" 		// void add_score(int addition)
+#include "round.h" 		// void add_score(int addition)
 
 /*void remove_char(int y, int x){
   move(y, x);
@@ -16,6 +16,9 @@
 
 void game_over(void) {
 	clear();
+	int row, col;
+	getmaxyx(stdscr, row, col);
+	move(row / 2, (col - 8)/2);
 	printw("GAME OVER");
 	getch();
 	return;

@@ -40,7 +40,7 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 		return -1;
 	}
 	else {
-		lseek64(file_descriptor, SIZE_OF_A_MAP * round_number, SEEK_SET);
+		lseek(file_descriptor, SIZE_OF_A_MAP * round_number, SEEK_SET);
 		if (len != read(file_descriptor, current_map, SIZE_OF_A_MAP)){
 			perror("Error while reading the file\n");
 			close(file_descriptor);

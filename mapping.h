@@ -22,5 +22,3 @@ void find_the_user(int map[][MAP_ROWS], int *user_map_y, int *user_map_x);
 void add_score();
 void show_the_top(void);
 #endif
-
-
