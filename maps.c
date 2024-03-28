@@ -2,8 +2,6 @@
 #include "mapping.h"
 #include "maps.h"
 //Change MAP_ROWS in "maps.h" when changinh its size!
-
-
 int old_current_map[MAP_ROWS][MAP_ROWS] = {
 {WA_L,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L ,WA_L},
 {WA_L,SPACE,HOLE ,SPACE,WA_L ,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,SPACE,WA_L},

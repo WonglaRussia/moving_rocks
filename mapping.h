@@ -3,13 +3,13 @@
 #define MAPPING_H
 
 #define MAP_ROWS 25
+
 #define ROCK 35
 #define LOCK_ROCK 36
 #define USE_R 64
 #define WA_L 178
 #define HOLE 79
 #define SPACE 32
-#define SCORE_SUM_FOR_ROCK 40
 
 void remove_char(int y, int x);
 void clear_the_screen(int *current_size_y, int *current_size_x);

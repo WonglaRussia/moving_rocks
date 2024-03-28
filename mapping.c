@@ -7,12 +7,7 @@
 #include "maps.h"		// extern int map[MAP_ROWS][MAP_ROWS];
 #include "round.h" 		// void add_score(int addition)
 
-/*void remove_char(int y, int x){
-  move(y, x);
-  addch(' ');
-  refresh();
-  return;
-}*/
+#define SCORE_SUM_FOR_ROCK 40
 
 void game_over(void) {
 	clear();

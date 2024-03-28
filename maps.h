@@ -1,5 +1,5 @@
 /* maps.h */
-#include "mapping.h"
+#include "mapping.h"		//MAP_ROWS
 
 #ifndef MAPPS_H
 #define MAPPS_H
