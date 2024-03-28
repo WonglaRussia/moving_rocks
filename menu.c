@@ -55,7 +55,7 @@ int menu() {
 	cur_position = Continue;
 	for(;;){
 	  if(cur_position < 0)
-		cur_position = 6;
+		cur_position = 5;
 	  else if(cur_position > 6)
 		cur_position %= 7;
 	  

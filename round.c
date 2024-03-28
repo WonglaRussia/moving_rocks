@@ -4,7 +4,7 @@
 #include "maps.h"		//extern int current_map[MAP_ROWS][MAP_ROWS];
 
 
-int score;
+signed int score;
 
 void add_score(int addition)
 {
@@ -19,47 +19,48 @@ int play_the_map(int current_map[][MAP_ROWS])
 	int map[MAP_ROWS][MAP_ROWS];					//temporal map for playing
 	 
 	copy_map(map, current_map);						//now do not use (change) the current map
+	
 	find_the_user(map, &user_map_y, &user_map_x); 	//define the user coordinates
+	remove_the_user(map, user_map_y, user_map_x);	//user defined not in the map
+	
 	show_the_top();
-	show_the_map( map, (sizeof(map) / sizeof(map[0])), (sizeof(map[0]) /sizeof(map[0][0])) );
+	show_the_map( map, (sizeof(map) / sizeof(map[0])), (sizeof(map[0]) /sizeof(map[0][0])), &user_map_y, &user_map_x );
+	
 	do {
 	  act = getch(); 								//action
 	  switch(act){
 	  case(KEY_UP):{
-		if (move_the_object(map, &user_map_y, &user_map_x, - 1, 0) == 200)
-			return 200;
+		if (move_the_object(map, &user_map_y, &user_map_x, -1,0) == 200)
+		  return 200;
 		break;
 	  }
 	  case(KEY_DOWN):{
-		if (move_the_object(map, &user_map_y, &user_map_x, +1, 0) == 200)
-			return 200;
+		if (move_the_object(map, &user_map_y, &user_map_x, +1,0) == 200)
+		  return 200;
 		break;
 	  }
 	  case(KEY_LEFT):{
-		if (move_the_object(map, &user_map_y, &user_map_x, 0, - 1) == 200)
-			return 200;
+		if (move_the_object(map, &user_map_y, &user_map_x, 0,-1) == 200)
+		  return 200;
 		break;
 	  }
 	  case(KEY_RIGHT):{
-		if (move_the_object(map, &user_map_y, &user_map_x, 0, +1) == 200)
-			return 200;
+		if (move_the_object(map, &user_map_y, &user_map_x, 0,+1) == 200)
+		  return 200;
 		break;
 	  }
 	  case(KEY_RESIZE):{
 		clear();								//to exclude multiplication of the garbage
 		break;
 	  }
-	  default: 
-	  /* clear();
-		printw("BW is %d", work_bw);
-		getch();  //to check output by int */
+	  default:
 	  break;
 	  }	  
 	  show_the_top();
-	  show_the_map( map, (sizeof(map) / sizeof(map[0])), (sizeof(map[0]) /sizeof(map[0][0])) );
-	  refresh();	  
+	  show_the_map(map, (sizeof(map)/sizeof(map[0])), (sizeof(map[0])/sizeof(map[0][0])), &user_map_y, &user_map_x);
+	  refresh();  
 	  if (check_the_result(map) == 100)			//if there is no free rocks you win
-	  {											//REWRITE go to the next map
+	  {											//REWRITE additional condition if there is no holes
 		endwin();
 		return 0;
 	  }
