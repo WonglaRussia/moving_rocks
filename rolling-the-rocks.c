@@ -18,7 +18,7 @@ char work_bw;							//b&w terminal?
 
 int main() {
 	enum position choosen_position;
-
+	
 	initscr();
 	work_bw = !has_colors();				//REWRITE all screen functions?
 	keypad(stdscr, 1); 						//esc seq for moving by arrows
@@ -27,9 +27,9 @@ int main() {
 	for(;;){		//REWRITE to forever while added options
 	  choosen_position = menu();
 	  switch(choosen_position) {
-	  case(Continue):			{if (start_game() == 1) endwin();	break;}
-	  case(Start): 				{if (start_game() == 1) endwin();	break;}
-	  case(Load_Charachter):;			
+	  case(Continue):			{ if(start_game() == 1) endwin();	break;}
+	  case(Start): 				{ if(start_game() == 1) endwin();	break;}
+	  case(Load_Charachter): 	break;			
 	  case(Save):     break;			// 
 	  case(Map_Editor): break;	//
 	  case(Play_on_line):break;

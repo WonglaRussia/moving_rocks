@@ -24,22 +24,30 @@ static void draw_menu(int current_position) {
 	option[6] = "Exit";
 	
 	int y, max_row, max_col;
-	int corner_y;						//start of the option line
-	int high = 3 * 7;					//only 3 rows for each 6 options (REWRITE?)
+	int corner_y;			//start of the option line
+	int high = 3 * 7;		//only 3 rows for each 6 options (REWRITE?)
 	int i;
-
+	int m;
 	getmaxyx(stdscr, max_row, max_col);
-	corner_y = (max_row / 2) - (high / 2);		//here y,x is the left upper corner of the menu
+	//here y is the left position of the menu
+	corner_y = (max_row / 2) - (high / 2);		
 	
 	clear();
 	for(i = 0; i < 7 ; i++ ) {
-	  y = corner_y + i; 				//a current position of the option
+	  y = corner_y + i;
+	  //print the option
 	  move(y, (max_col / 2) - (strlen(option[i])/2) );
 	  printw("%s", option[i]);
 	  if(i == current_position) {
+		//print left asteriks *
 		move(y, (max_col/2) - strlen(option[i])/2 - 2);
 		addch('*');
-		move(y, (max_col/2) + strlen(option[i])/2 + 2);
+		
+		//only to align gap among the end of the text and asteriks *
+		if((strlen(option[i]) % 2) != 0) { m = 2; } 
+		else m = 1;
+		//print right asteriks *
+		move(y, (max_col/2) + strlen(option[i])/2 + m);
 		addch('*');
 	  }
 
@@ -54,18 +62,25 @@ int menu() {
 	int input;
 	cur_position = Continue;
 	for(;;){
-	  if(cur_position < 0)
-		cur_position = 5;
+	  if(cur_position < 0) //!!REWRITE it is ENUM
+		cur_position = 6;
 	  else if(cur_position > 6)
-		cur_position %= 7;
+		cur_position = 0; 
 	  
 	  draw_menu(cur_position);
 	  
 	  input = getch();
 	  switch(input){
-	  case(KEY_UP):		{ --cur_position; break; }
-	  case(KEY_DOWN):	{ ++cur_position; break; }
-	  case('\n'):		return cur_position;
+	  case(KEY_UP):{ 
+	    --cur_position;
+		break;
+	  }
+	  case(KEY_DOWN):{
+		++cur_position;
+		break;
+	  }
+	  case('\n'):
+	    return cur_position;
 	  default: ;
 	  }
 	}
