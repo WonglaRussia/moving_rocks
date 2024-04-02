@@ -120,15 +120,15 @@ int move_the_object(int map[][MAP_ROWS],int *old_row, int *old_col, int delta_ro
 int check_the_result(int map[][MAP_ROWS])  //REWRITE add checking uneven number of rocks and holes
 {
   int y,x;
-
+  int h,r;
+  h = r = 0;
   for(y = 0; y < MAP_ROWS; y++) 
     for(x = 0; x < (sizeof(map[0]) / sizeof(map[0][0])); x++)
-      if(map[y][x] == HOLE)			//IF any HOLE stil is on the map pass by
-  	  return 0;
-  clear();
-  printw("YOU WIN!");				//theri is no any hole
-  getch();							//REWRITE
-  return 100;
+      if(map[y][x] == HOLE) h++;
+	  else if(map[y][x] == ROCK) r++;
+  if(r == 0 || h == 0)
+	return 100;
+  return 0;
 }
 
 void find_the_user(int map[][MAP_ROWS], int *user__y, int *user__x) //returns the user location

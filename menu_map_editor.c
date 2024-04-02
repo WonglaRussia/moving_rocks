@@ -2,18 +2,24 @@
 #include <ncurses.h> 	//getch(),printw(),move() e.t.c.
 #include <stdlib.h>		//malloc();
 #include "file.h"		//load_map();
-#include "mapping.h"	//WA_L
+#include "mapping.h"	//WA_L SPACE ROCK HOLE e.t.c
 
 //here we show the instructions
 static void show_side_bar(int row, int col) {
 	move(row,col);
 	printw("Keys");
 	move(row+1,col);
-	printw("w - wall");
-	move(row+2,col);
 	printw("space - remove an object");
+	move(row+2,col);
+	printw("w - put wall");
 	move(row+3,col);
-	printw("s - save");
+	printw("r - put a rock");
+	move(row+4,col);
+	printw("h - put a hole");
+	move(row+5,col);
+	printw("s - append the map to the campaing");
+	move(row+5,col);
+	printw("c - clear current map");
 	return;
 }
 //show the border of the showed map (do not confuse with the walls)
@@ -63,7 +69,17 @@ static void show_the_editor(int map[][MAP_ROWS],int max_row, int max_col, int cu
 }
 
 //before save we will can save the minimal check if the player cant win
+// 1 - map is not ready
 static int check_if_the_map_is_ready(int map[][MAP_ROWS]) {
+	int x, y;
+	int r, h;
+	r = h = 0;
+    for(y = 0 ; y < MAP_ROWS; ++y)
+	  for(x = 0 ; x < MAP_ROWS; ++x)
+		if(map[y][x] == ROCK) r++;
+		else if(map[y][x] == HOLE) h++;
+	if(h < 1)
+	  return 1;
 	return 0;
 }
 //just full the map with spases
@@ -115,7 +131,7 @@ int edit()
 	  }
 	  default: break;
 	  }
-	  x %= MAP_ROWS;	//limite coord position by map size
+	  x %= MAP_ROWS;	//to limit coordinates by map size
 	  y %= MAP_ROWS;
 	  clear();
 	  show_the_editor(map, max_row, max_col, y, x);

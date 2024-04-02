@@ -59,9 +59,12 @@ int play_the_map(int current_map[][MAP_ROWS])
 	  show_the_top();
 	  show_the_map(map, (sizeof(map)/sizeof(map[0])), (sizeof(map[0])/sizeof(map[0][0])), &user_map_y, &user_map_x);
 	  refresh();  
-	  if (check_the_result(map) == 100)			//if there is no free rocks you win
+	  if (check_the_result(map) == 100)			//
 	  {											//REWRITE additional condition if there is no holes
-		endwin();
+		  clear();
+		printw("YOU WIN!");					//theri is no any hole
+		getch();							//REWRITE  
+		endwin(); //? REWRITE ?
 		return 0;
 	  }
 	 } 
