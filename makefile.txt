@@ -1,0 +1,16 @@
+file.o: file.c file.h
+	c:\gwin64\bin\gcc.exe -g -Wall -с .\file.c -o file.o
+mapping.o: mapping.c mapping.h
+	c:\gwin64\bin\gcc.exe -g -Wall -с .\mapping.c -o .\mapping.o -lncurses
+maps.o: maps.c maps.h
+	c:\gwin64\bin\gcc.exe -g -Wall -с .\maps.c -o .\maps.o
+menu.o: menu.c menu.h
+	c:\gwin64\bin\gcc.exe -g -Wall -с menu.c -o menu.o -lncurses
+menu_map_editor.o: menu_map_editor.c menu_map_editor.h
+	c:\gwin64\bin\gcc.exe -g -Wall -с menu_map_editor.c -o menu_map_editor.o
+menu_start.o: menu_start.c menu_start.h
+	c:\gwin64\bin\gcc.exe -g -Wall -с menu_start.c -o menu_start.o
+round.o: round.c round.h
+	c:\gwin64\bin\gcc.exe -g -Wall -с round.c -o round.o -lncurses
+MAIN.exe: rolling-the-rocks.c file.o mapping.o maps.o menu.o menu_map_editor.o menu_start.o round.o
+	c:\gwin64\bin\gcc.exe -g -Wall rolling-the-rocks.c file.o mapping.o maps.o menu.o menu_map_editor.o menu_start.o round.o -o MAIN.exe -lncurses

@@ -1,4 +1,4 @@
-/* rolling-the-rock.c */
+/* main.c */
 #include <string.h>						//to set string address
 #include <ncurses.h>					//here we initialize the screen
 #include <stdlib.h>
@@ -27,11 +27,11 @@ int main() {
 	for(;;){		//REWRITE to forever while added options
 	  choosen_position = menu();
 	  switch(choosen_position) {
-	  case(Continue):			{ if(start_game() == 1) endwin();	break;}
-	  case(Start): 				{ if(start_game() == 1) endwin();	break;}
+	  case(Continue):			{ if(start_game()== 1) endwin();	break;}
+	  case(Start): 				{ if(start_game()== 1) endwin();	break;}
 	  case(Load_Charachter): 	break;			
-	  case(Save):     break;			// 
-	  case(Map_Editor): break;	//
+	  case(Save):     break;			 
+	  case(Map_Editor):			{ if( edit() == 1 ) endwin(); 		break;}
 	  case(Play_on_line):break;
 	  case(Exit): 				{endwin(); exit(0);}
 	  }
