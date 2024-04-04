@@ -2,7 +2,7 @@
 #include "file.h"		//load_map()
 #include "round.h"		//play_the_map(); extern int score
 #include "mapping.h"	//define MAP_ROWS
-#define FILE_N_MAPS "Rolling_maps.rrmap"//default map chain
+#define FILE_N_MAPS "vova_campaign.rrmap"//default map chain
 
 //REWRITE to user structure with filename,round,name,id. To load/save/continue
 //the game with the same function
