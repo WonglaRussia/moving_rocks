@@ -4,10 +4,32 @@
 #include <errno.h>			//perror()
 #include <unistd.h>			//open() close() lseek()
 #include <fcntl.h>			//file options O_RDONLY e.t.c.
+#include <sys/types.h>
+#include <dirent.h>
 
 #include "mapping.h"		//define MAP_ROWS
-#define SIZE_OF_A_MAP 2500
+#define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2
 
+int list_campaing(char list[10][255]) {
+	DIR *dir;
+	struct dirent *file;
+	const char *name = ".";
+	dir = opendir(name);
+	if(!dir) {
+		perror("Can`t open dir");
+		return 1;
+	}
+	for (int i = 0;(file = readdir(dir)) != NULL; i++) {
+		*(list[i]) = file -> d_name;
+	}
+	closedir(dir);
+	return 0;
+}
+/*
+int delete_campaign(const *camp_name) {
+	unlink
+}
+*/
 int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 {
 	int file_descriptor;

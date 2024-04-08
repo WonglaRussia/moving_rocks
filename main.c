@@ -6,6 +6,7 @@
 #include "menu.h"						//int menu();
 #include "menu_start.h"					//int start_game()
 #include "menu_map_editor.h"			//int edit();
+#include "menu_load.h"					//int load_camp();
 
 int main() {
 	enum position choosen_position;
@@ -17,9 +18,9 @@ int main() {
 	for(;;){		//REWRITE to forever while added options
 	  choosen_position = menu();
 	  switch(choosen_position) {
-	  case(Continue):			{ if(start_game()== 1) endwin();	break;}
-	  case(Start): 				{ if(start_game()== 1) endwin();	break;}
-	  case(Load_Charachter): 	break;			
+	  case(Continue):			{ if(start_game() == 1){getch(); endwin();}	break;}
+	  case(Start): 				{ if(start_game() == 1) endwin();	break;}
+	  case(Load_Charachter): 	{ load_camp();	endwin(); break;}			
 	  case(Save):     break;			 
 	  case(Map_Editor):			{ if( edit() == 1 ) endwin(); 		break;}
 	  case(Play_on_line):break;

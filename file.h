@@ -4,4 +4,5 @@
 #define G_FILE_H
 int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name);
 int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_number);
+int list_campaing(char list[][255]);
 #endif

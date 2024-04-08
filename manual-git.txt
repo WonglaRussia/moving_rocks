@@ -1,0 +1,43 @@
+#Branches
+git branch --list
+git switch <branch name>
+
+git reset --hard main
+
+#Take all commitments
+git log
+git log --reflog
+
+#To take commitments ID in logs
+git log --oneline
+#To restore the file using cimmitment ID
+git restore --source=ed6af22 menu_start.c
+
+#Logs of the file / directory
+git log -p file.c
+#Restore file filename = (.) grom the commitent
+git restore --source=70b3e69 .
+
+#Check staging status
+git status
+
+#Commands changing staging status (Workplace ----> Staging)
+	#add file . OR add from untackable
+git add .
+	#UPDATE INDEX
+git add -u
+	#change dir mkdir data && git mv readme.txt data
+git mv
+git rm
+	#???
+git rm --cached` and `$ git update-index
+
+#Staging ----> Local Repo
+git commit -m "Comments"
+
+#Local Repo ---> Remote Repo
+git push
+
+#Workpalce <----- Remote Repo
+git pull
+git clone
