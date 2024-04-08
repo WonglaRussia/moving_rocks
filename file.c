@@ -10,26 +10,6 @@
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2
 
-int list_campaing(char list[10][255]) {
-	DIR *dir;
-	struct dirent *file;
-	const char *name = ".";
-	dir = opendir(name);
-	if(!dir) {
-		perror("Can`t open dir");
-		return 1;
-	}
-	for (int i = 0;(file = readdir(dir)) != NULL; i++) {
-		*(list[i]) = file -> d_name;
-	}
-	closedir(dir);
-	return 0;
-}
-/*
-int delete_campaign(const *camp_name) {
-	unlink
-}
-*/
 int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 {
 	int file_descriptor;
@@ -72,3 +52,34 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 	close(file_descriptor);
 	return 0;
 }
+
+struct f_list {
+	char *file_name;
+	struct f_list *next;
+}
+
+struct f_list* ls_dr(const char *dr_nm) {
+	struct f_list *first = NULL, *last = NULL, *tmp;
+	struct dirent fl;
+	DIR *dir;
+	dir = opendir(dr_nm);
+	if(!dir) {
+		perror("Can`t open dir");
+		return 1;
+	}
+	for (;(fl = readdir(dir)) != NULL;) {
+	  tmp = malloc(sizeof(struct f_list));
+	  tmp -> file_name = fl -> d_name;
+	  tmp -> next = NULL;
+	  if(last) {
+		last -> next = tmp;
+		last = last -> next;
+	  }
+	  else {
+		first = last = tmp;
+	  }
+	}
+	closedir(dir);
+	return 0;
+}
+/*
