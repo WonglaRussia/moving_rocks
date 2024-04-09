@@ -6,6 +6,10 @@
 #include <fcntl.h>			//file options O_RDONLY e.t.c.
 #include <sys/types.h>
 #include <dirent.h>
+#include <stdio.h>
+#include <stdlib.h>		//malloc
+
+#include <string.h>
 
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2
@@ -54,9 +58,11 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 }
 
 struct f_list {
+	int count;
 	char *file_name;
 	struct f_list *next;
 };
+
 // Retrive list of filest from dr_nm (directory name) to ls_dr.
 struct f_list* ls_dr(const char *dr_nm) {
 	struct f_list *first = NULL, *last = NULL, *tmp;
@@ -67,15 +73,20 @@ struct f_list* ls_dr(const char *dr_nm) {
 		perror("Can`t open dir");
 		return NULL;
 	}
+	int i = 0;
 	while((fl = readdir(dir))) {
-	  tmp = malloc(sizeof(struct f_list));
-	  tmp -> file_name = fl -> d_name;
-	  tmp -> next = NULL;
-	  if(first == NULL) {
-		first = last = tmp;
-	  } else {
-		last -> next = tmp;
-		last = last -> next;
+	  if(fl -> d_type == DT_REG){
+		if(!(tmp = malloc(sizeof(struct f_list))))
+			exit(1);
+		tmp -> count = i;
+		tmp -> file_name = fl -> d_name;
+		tmp -> next = NULL;
+		if(first == NULL) {
+		  first = last = tmp;
+		} else {
+		  last -> next = tmp;
+		  last = last -> next;
+		}
 	  }
 	}
 	closedir(dir);
