@@ -6,7 +6,6 @@
 #include <fcntl.h>			//file options O_RDONLY e.t.c.
 #include <sys/types.h>
 #include <dirent.h>
-#include <stdio.h>
 #include <stdlib.h>		//malloc
 
 #include <string.h>
@@ -81,13 +80,15 @@ struct f_list* ls_dr(const char *dr_nm) {
 		tmp -> count = i;
 		tmp -> file_name = fl -> d_name;
 		tmp -> next = NULL;
-		if(first == NULL) {
-		  first = last = tmp;
+		if(!first) {
+		  first = tmp;
+		  last = tmp;
 		} else {
 		  last -> next = tmp;
 		  last = last -> next;
 		}
 	  }
+	  i++;
 	}
 	closedir(dir);
 	return first;
