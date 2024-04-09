@@ -56,30 +56,28 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 struct f_list {
 	char *file_name;
 	struct f_list *next;
-}
-
+};
+// Retrive list of filest from dr_nm (directory name) to ls_dr.
 struct f_list* ls_dr(const char *dr_nm) {
 	struct f_list *first = NULL, *last = NULL, *tmp;
-	struct dirent fl;
+	struct dirent *fl;
 	DIR *dir;
 	dir = opendir(dr_nm);
 	if(!dir) {
 		perror("Can`t open dir");
-		return 1;
+		return NULL;
 	}
-	for (;(fl = readdir(dir)) != NULL;) {
+	while((fl = readdir(dir))) {
 	  tmp = malloc(sizeof(struct f_list));
 	  tmp -> file_name = fl -> d_name;
 	  tmp -> next = NULL;
-	  if(last) {
+	  if(first == NULL) {
+		first = last = tmp;
+	  } else {
 		last -> next = tmp;
 		last = last -> next;
 	  }
-	  else {
-		first = last = tmp;
-	  }
 	}
 	closedir(dir);
-	return 0;
+	return first;
 }
-/*

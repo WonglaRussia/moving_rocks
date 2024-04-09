@@ -3,15 +3,18 @@
 #include <string.h>
 #include "file.h"
 
-int load_camp(){
-	char list[][255];
-	if (list_campaing(list) == 1) {
-		mvprintw(10,10,"%s","Cant read directory content.");
-		getch();
-		return 1;
+/* load campaign from the file */
+int ld_cmp(){
+	struct f_list *camp;
+	camp = ls_dr("C:\\Users\\asanov\\Desktop\\GITHUB\\moving_rocks\\");
+	clear();
+	for(int i=0; camp; i++){
+	  char *text;
+	  text = camp -> file_name;
+	  move(2+i,10);
+	  printw("%s", text);
+	  camp = camp -> next; 
 	}
-	else clear();
-	mvprintw(10,10,"%s","CAN read directory content.");
 	getch();
 	return 0;
 }
