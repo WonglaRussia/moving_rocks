@@ -55,6 +55,7 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 	close(file_descriptor);
 	return 0;
 }
+
 //list of filenames;
 struct f_list {
 	char *file_name;
@@ -63,26 +64,28 @@ struct f_list {
 
 
 // 1 = match;
-static int compare(const char *pattern, const char *string){
+static int compare(const char pattern[], const char string[]){
 	if(pattern[0] == 0)
-	  return 1; /* walked through all the pattern already */
-	else if(pattern[0] == string[0]) {
-	  if((compare(pattern+1, string+1)) == 1)
-	    return 1; /* try to check all the pattern */
-	}
+	  return 1; 	/* walked through all the pattern already */
+	else
+	  if(pattern[0] == string[0]) {
+	    if(compare(pattern+1, string+1) == 1)
+	      return 1; /* try to check all the pattern */
+	} 
+	else 
+      if(string[0] == 0)
+	    return 1;
 	return compare(pattern, string+1);
 }
 	
-
-static struct f_list* chck_ls(struct f_list *raw_list, char *pattern) {
+//exclude from list by pattern
+struct f_list* chck_ls(struct f_list *raw_list) {
   struct f_list *first, *prew = NULL, *tmp, *current;
   char *string;
-  
-  first = current = raw_list;
-  
+  first = current = raw_list;			/* begin of list */
   while(current){ 						/* != NULL */
     string = current -> file_name;		/* set file name */
-    if(!compare(pattern, string)){ 		/* not rrmap */
+    if(compare(".rrmap", string) == 0){ /* not rrmap */
       if(prew)							/* prew != NULL */
   	    prew -> next = current -> next;	  
       if(current == first)				
@@ -95,7 +98,7 @@ static struct f_list* chck_ls(struct f_list *raw_list, char *pattern) {
       current = current -> next;
     }
   }
-return first;
+  return first;
 }
 
 // Retrive list of files from dr_nm (directory name) to ls_dr.
@@ -124,6 +127,7 @@ struct f_list* ls_dr(const char *dr_nm) {
 	  }
 	}
 	closedir(dir);
-	first = chck_ls(first, "rrmap");
+	tmp = first;
+	first = chck_ls(tmp);
 	return first;
 }
