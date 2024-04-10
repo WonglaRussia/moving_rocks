@@ -11,7 +11,7 @@ int ld_cmp(){
 	clear();
 	for(int i=0; camp; i++){
 	  move(2+i,10);
-	  printw("%d %s", camp -> count, camp -> file_name);
+	  printw("%s", camp -> file_name);
 	  camp = camp -> next; 
 	}
 	getch();

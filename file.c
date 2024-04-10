@@ -5,13 +5,13 @@
 #include <unistd.h>			//open() close() lseek()
 #include <fcntl.h>			//file options O_RDONLY e.t.c.
 #include <sys/types.h>
-#include <dirent.h>
-#include <stdlib.h>		//malloc
-
-#include <string.h>
+#include <dirent.h>			//opendir(), readdir()
+#include <stdlib.h>			//malloc()
+#include <string.h>			//strcpy()
 
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2
+#define RRMAP .rrmap
 
 int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 {
@@ -55,14 +55,50 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 	close(file_descriptor);
 	return 0;
 }
-
+//list of filenames;
 struct f_list {
-	int count;
 	char *file_name;
 	struct f_list *next;
 };
 
-// Retrive list of filest from dr_nm (directory name) to ls_dr.
+
+// 1 = match;
+static int compare(const char *pattern, const char *string){
+	if(pattern[0] == 0)
+	  return 1; /* walked through all the pattern already */
+	else if(pattern[0] == string[0]) {
+	  if((compare(pattern+1, string+1)) == 1)
+	    return 1; /* try to check all the pattern */
+	}
+	return compare(pattern, string+1);
+}
+	
+
+static struct f_list* chck_ls(struct f_list *raw_list, char *pattern) {
+  struct f_list *first, *prew = NULL, *tmp, *current;
+  char *string;
+  
+  first = current = raw_list;
+  
+  while(current){ 						/* != NULL */
+    string = current -> file_name;		/* set file name */
+    if(!compare(pattern, string)){ 		/* not rrmap */
+      if(prew)							/* prew != NULL */
+  	    prew -> next = current -> next;	  
+      if(current == first)				
+  	    first = first -> next;			/* removes first record */
+  	  tmp = current;
+  	  current = current -> next;
+  	  free(tmp);		
+    } else {							/* just move further */
+      prew = current;
+      current = current -> next;
+    }
+  }
+return first;
+}
+
+// Retrive list of files from dr_nm (directory name) to ls_dr.
 struct f_list* ls_dr(const char *dr_nm) {
 	struct f_list *first = NULL, *last = NULL, *tmp;
 	struct dirent *fl;
@@ -72,24 +108,22 @@ struct f_list* ls_dr(const char *dr_nm) {
 		perror("Can`t open dir");
 		return NULL;
 	}
-	int i = 0;
 	while((fl = readdir(dir))) {
 	  if(fl -> d_type == DT_REG){
 		if(!(tmp = malloc(sizeof(struct f_list))))
 			exit(1);
-		tmp -> count = i;
-		tmp -> file_name = fl -> d_name;
+		tmp -> file_name = malloc(256);
+		strcpy(tmp -> file_name, fl -> d_name);
 		tmp -> next = NULL;
-		if(!first) {
-		  first = tmp;
-		  last = tmp;
-		} else {
+		if(first) {
 		  last -> next = tmp;
 		  last = last -> next;
+		} else {
+		  first = last = tmp;
 		}
 	  }
-	  i++;
 	}
 	closedir(dir);
+	first = chck_ls(first, "rrmap");
 	return first;
 }
