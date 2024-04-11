@@ -62,9 +62,19 @@ struct f_list {
 	struct f_list *next;
 };
 
+//free the file list
+int free_f_list(struct f_list *file_list) {
+	struct file_list *tmp;
+	while(file_list){
+	  tmp = file_list;
+	  file_list = file_list -> next;
+	  free(tmp);
+	}
+	return 0;
+}
 
-// 1 = match;
-static int compare(const char pattern[], const char string[]){
+// check if pattern is in the string; 1 = match;
+static int compare(const char *pattern, const char *string){
 	if(pattern[0] == 0)
 	  return 1; 	/* walked through all the pattern already */
 	else
@@ -74,18 +84,18 @@ static int compare(const char pattern[], const char string[]){
 	} 
 	else 
       if(string[0] == 0)
-	    return 1;
+	    return 0;
 	return compare(pattern, string+1);
 }
-	
-//exclude from list by pattern
-struct f_list* chck_ls(struct f_list *raw_list) {
+
+// exclude from file list by comparing file name with pattern
+static struct f_list* chck_ls(struct f_list *raw_list, const char * pattern) {
   struct f_list *first, *prew = NULL, *tmp, *current;
   char *string;
   first = current = raw_list;			/* begin of list */
   while(current){ 						/* != NULL */
     string = current -> file_name;		/* set file name */
-    if(compare(".rrmap", string) == 0){ /* not rrmap */
+    if(compare(pattern, string) == 0){ 	/* not rrmap */
       if(prew)							/* prew != NULL */
   	    prew -> next = current -> next;	  
       if(current == first)				
@@ -102,7 +112,7 @@ struct f_list* chck_ls(struct f_list *raw_list) {
 }
 
 // Retrive list of files from dr_nm (directory name) to ls_dr.
-struct f_list* ls_dr(const char *dr_nm) {
+struct f_list* ls_dr(const char *dr_nm, const char *pattern) {
 	struct f_list *first = NULL, *last = NULL, *tmp;
 	struct dirent *fl;
 	DIR *dir;
@@ -127,7 +137,6 @@ struct f_list* ls_dr(const char *dr_nm) {
 	  }
 	}
 	closedir(dir);
-	tmp = first;
-	first = chck_ls(tmp);
+	first = chck_ls(first, pattern);
 	return first;
 }

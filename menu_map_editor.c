@@ -6,6 +6,10 @@
 #include "file.h"		//load_map();
 #include "mapping.h"	//WA_L SPACE ROCK HOLE e.t.c
 
+/* REWRITE
+ * Add load map. 
+ * Add saving to the certain round position (not append only)*/
+
 //Jist show the list of messages. q = how many strings.
 static void shw_msg(int q, ...){
 	char *tmp;

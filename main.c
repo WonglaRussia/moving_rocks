@@ -8,6 +8,12 @@
 #include "menu_map_editor.h"			//int edit();
 #include "menu_load.h"					//int ld_cmp();
 
+
+/*
+	static char *option[7];
+,
+*/
+
 int main(){
 	enum position choosen_position;
 	
@@ -16,7 +22,7 @@ int main(){
 	curs_set(0);
 
 	for(;;){
-	  choosen_position = menu();
+	  choosen_position = menu(7,"Continue","Start","Load_Charachter","Save","Map_Editor","Play_on-line","Exit");
 	  switch(choosen_position) {
 	  case(Continue):			{ if(start_game() == 1){getch(); endwin();}	break;}
 	  case(Start): 				{ if(start_game() == 1) endwin();	break;}
