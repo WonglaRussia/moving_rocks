@@ -32,7 +32,6 @@ int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 		perror("File closed with warnings.");
 	return 0;
 }
-
 //Round number offsets reading map by map. The first round is 0
 int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_number)
 {
@@ -55,16 +54,25 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 	close(file_descriptor);
 	return 0;
 }
-
 //list of filenames;
 struct f_list {
 	char *file_name;
 	struct f_list *next;
 };
-
+//resturns quantity of files in directory;
+int count_f_list(struct f_list *first){
+	struct f_list *tmp;
+	int i;
+	tmp = first;
+	if(!first)
+	  return 0;
+	for(i = 0; tmp; i++) 
+	  tmp = tmp -> next;
+	return i;
+}
 //free the file list
 int free_f_list(struct f_list *file_list) {
-	struct file_list *tmp;
+	struct f_list *tmp;
 	while(file_list){
 	  tmp = file_list;
 	  file_list = file_list -> next;
@@ -72,7 +80,6 @@ int free_f_list(struct f_list *file_list) {
 	}
 	return 0;
 }
-
 // check if pattern is in the string; 1 = match;
 static int compare(const char *pattern, const char *string){
 	if(pattern[0] == 0)
@@ -87,7 +94,6 @@ static int compare(const char *pattern, const char *string){
 	    return 0;
 	return compare(pattern, string+1);
 }
-
 // exclude from file list by comparing file name with pattern
 static struct f_list* chck_ls(struct f_list *raw_list, const char * pattern) {
   struct f_list *first, *prew = NULL, *tmp, *current;
@@ -110,7 +116,6 @@ static struct f_list* chck_ls(struct f_list *raw_list, const char * pattern) {
   }
   return first;
 }
-
 // Retrive list of files from dr_nm (directory name) to ls_dr.
 struct f_list* ls_dr(const char *dr_nm, const char *pattern) {
 	struct f_list *first = NULL, *last = NULL, *tmp;
@@ -140,3 +145,4 @@ struct f_list* ls_dr(const char *dr_nm, const char *pattern) {
 	first = chck_ls(first, pattern);
 	return first;
 }
+

@@ -16,4 +16,5 @@ int free_f_list(struct f_list *file_list);
  * List contains the names according to "pattern" */
 struct f_list* ls_dr(const char *dr_nm, const char *pattern);
 
+int count_f_list(struct f_list *first);
 #endif

@@ -15,8 +15,7 @@
 */
 
 int main(){
-	enum position choosen_position;
-	
+	int choosen_position;
 	initscr();
 	keypad(stdscr, 1); 					/*esc seq for moving by arrows*/
 	curs_set(0);
@@ -24,13 +23,13 @@ int main(){
 	for(;;){
 	  choosen_position = menu(7,"Continue","Start","Load_Charachter","Save","Map_Editor","Play_on-line","Exit");
 	  switch(choosen_position) {
-	  case(Continue):			{ if(start_game() == 1){getch(); endwin();}	break;}
-	  case(Start): 				{ if(start_game() == 1) endwin();	break;}
-	  case(Load_Charachter): 	{ ld_cmp();	endwin(); break;}			
-	  case(Save):     break;			 
-	  case(Map_Editor):			{ if( edit() == 1 ) endwin(); 		break;}
-	  case(Play_on_line):break;
-	  case(Exit): 				{endwin(); exit(0);}
+	  case(0):	{ if(start_game() == 1){getch(); endwin();}	break;} /* Continue */
+	  case(1): 	{ if(start_game() == 1) endwin();	break;}		/* Start */
+	  case(2): 	{ ld_cmp();	endwin(); break;}								/* Load_Charachter */
+	  case(3):   break;			 										/* Save */
+	  case(4):	{ if( edit() == 1 ) endwin(); 		break;}			/*  Map_Editor */
+	  case(5):	break;
+	  case(6): 	{endwin(); exit(0);} 					/* Exit */
 	  }
 	}
 endwin();
