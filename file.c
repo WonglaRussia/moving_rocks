@@ -9,9 +9,9 @@
 #include <stdlib.h>			//malloc()
 #include <string.h>			//strcpy()
 
+#include "list.h"			//struct list; chck_ls();
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2
-#define RRMAP .rrmap
 
 int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 {
@@ -54,71 +54,9 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 	close(file_descriptor);
 	return 0;
 }
-//list of filenames;
-struct f_list {
-	char *file_name;
-	struct f_list *next;
-};
-//resturns quantity of files in directory;
-int count_f_list(struct f_list *first){
-	struct f_list *tmp;
-	int i;
-	tmp = first;
-	if(!first)
-	  return 0;
-	for(i = 0; tmp; i++) 
-	  tmp = tmp -> next;
-	return i;
-}
-//free the file list
-int free_f_list(struct f_list *file_list) {
-	struct f_list *tmp;
-	while(file_list){
-	  tmp = file_list;
-	  file_list = file_list -> next;
-	  free(tmp);
-	}
-	return 0;
-}
-// check if pattern is in the string; 1 = match;
-static int compare(const char *pattern, const char *string){
-	if(pattern[0] == 0)
-	  return 1; 	/* walked through all the pattern already */
-	else
-	  if(pattern[0] == string[0]) {
-	    if(compare(pattern+1, string+1) == 1)
-	      return 1; /* try to check all the pattern */
-	} 
-	else 
-      if(string[0] == 0)
-	    return 0;
-	return compare(pattern, string+1);
-}
-// exclude from file list by comparing file name with pattern
-static struct f_list* chck_ls(struct f_list *raw_list, const char * pattern) {
-  struct f_list *first, *prew = NULL, *tmp, *current;
-  char *string;
-  first = current = raw_list;			/* begin of list */
-  while(current){ 						/* != NULL */
-    string = current -> file_name;		/* set file name */
-    if(compare(pattern, string) == 0){ 	/* not rrmap */
-      if(prew)							/* prew != NULL */
-  	    prew -> next = current -> next;	  
-      if(current == first)				
-  	    first = first -> next;			/* removes first record */
-  	  tmp = current;
-  	  current = current -> next;
-  	  free(tmp);		
-    } else {							/* just move further */
-      prew = current;
-      current = current -> next;
-    }
-  }
-  return first;
-}
 // Retrive list of files from dr_nm (directory name) to ls_dr.
-struct f_list* ls_dr(const char *dr_nm, const char *pattern) {
-	struct f_list *first = NULL, *last = NULL, *tmp;
+struct list* ls_dr(const char *dr_nm, const char *pattern) {
+	struct list *first = NULL, *last = NULL, *tmp;
 	struct dirent *fl;
 	DIR *dir;
 	dir = opendir(dr_nm);
@@ -128,10 +66,10 @@ struct f_list* ls_dr(const char *dr_nm, const char *pattern) {
 	}
 	while((fl = readdir(dir))) {
 	  if(fl -> d_type == DT_REG){
-		if(!(tmp = malloc(sizeof(struct f_list))))
+		if(!(tmp = malloc(sizeof(struct list))))
 			exit(1);
-		tmp -> file_name = malloc(256);
-		strcpy(tmp -> file_name, fl -> d_name);
+		tmp -> content = malloc(256);
+		strcpy(tmp -> content, fl -> d_name);
 		tmp -> next = NULL;
 		if(first) {
 		  last -> next = tmp;
@@ -145,4 +83,3 @@ struct f_list* ls_dr(const char *dr_nm, const char *pattern) {
 	first = chck_ls(first, pattern);
 	return first;
 }
-
