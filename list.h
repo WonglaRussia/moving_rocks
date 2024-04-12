@@ -11,4 +11,9 @@ int count_list(struct list *first);
 int free_list(struct list *flist);
 //excludes nodes not containing the pattern in contetnt record.
 struct list* chck_ls(struct list *raw_list, const char * pattern);
+/* Just create the list of options 
+ * use char* as function param */
+struct list* form_list(int qt, ...);
+//Return the content of the pointed inode (serial [ 0; quantity of inodes - 1 ])
+char* retrive_content(int serial, struct list *first);
 #endif

@@ -3,26 +3,34 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "file.h"			/* ls_dr(); struct f_list->f_list */
+#include "list.h"			/* struct list, free_list() */
+#include "file.h"			/* ls_dr() */
 #include "menu.h"		
-
+#include "menu_start.h"		/* start_game() */
 
 /* load campaign from the file */
-int ld_cmp(){
-	struct f_list *camp, *tmp;
-	camp = ls_dr("./maps",".rrmap");
-	tmp = camp;
-	clear();
-	for(int i=0; camp; i++){
-	  move(2+i,10);
-	  printw("%s", camp -> file_name);
-	  camp = camp -> next; 
+	int load_cmp(){
+	int choosen_position, qt;
+	struct list *options,*tmp;
+	char *file_name;
+	file_name = malloc(260);
+	options = ls_dr("./maps",".rrmap");
+	tmp = options;
+/* Getting the last campaign to add exit option */
+	while(tmp->next){		
+	  tmp = tmp -> next;
 	}
-	move(10,10);
-	printw("%d", count_f_list(tmp));
-	getch();
-	free_f_list(camp);
-	return 0;
+	tmp -> next = form_list(1,"Main menu");
+	qt = count_list(options) - 1;
+	clear();	
+	for(;;){
+	  choosen_position = menu(options); 
+	  if(choosen_position == qt)
+		return 0;
+	  else {
+	    file_name = retrive_content(choosen_position, options);
+		start_game(file_name);
+	  }
+	}
+	free(file_name);
 }
-
-

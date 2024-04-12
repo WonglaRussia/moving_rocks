@@ -13,8 +13,7 @@
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2
 
-int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
-{
+int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name){
 	int file_descriptor;
 	int len = SIZE_OF_A_MAP;
 	
@@ -32,9 +31,8 @@ int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name)
 		perror("File closed with warnings.");
 	return 0;
 }
-//Round number offsets reading map by map. The first round is 0
-int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_number)
-{
+//Loads the map from the file to current_map. The first round is 0.
+int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_number){
 	int file_descriptor;
 	int len = SIZE_OF_A_MAP;
 	
@@ -55,7 +53,7 @@ int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_numbe
 	return 0;
 }
 // Retrive list of files from dr_nm (directory name) to ls_dr.
-struct list* ls_dr(const char *dr_nm, const char *pattern) {
+struct list* ls_dr(const char *dr_nm, const char *pattern){
 	struct list *first = NULL, *last = NULL, *tmp;
 	struct dirent *fl;
 	DIR *dir;

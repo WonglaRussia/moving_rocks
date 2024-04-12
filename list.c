@@ -8,24 +8,12 @@
 #include <dirent.h>			//opendir(), readdir()
 #include <stdlib.h>			//malloc()
 #include <string.h>			//strcpy()
-
-#include "mapping.h"		//define MAP_ROWS
-#define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2
-#define RRMAP .rrmap
-
-//list
-/* 
-struct f_list {
-	char *file_name;
-	struct f_list *next;
-}; 
-*/
+#include <stdarg.h> 	/* va_list va_start() va_arg() va_end() */
 struct list {
 	char *content;
 	struct list *next;
 };
 //resturns quantity of files in directory;
-//int count_f_list(struct list *first)
 int count_list(struct list *first){
 	struct list *tmp;
 	int i;
@@ -37,7 +25,6 @@ int count_list(struct list *first){
 	return i;
 }
 //free the file list mem
-//int free_f_list(struct list *flist) 
 int free_list(struct list *flist) {
 	struct list *tmp;
 	while(flist){
@@ -62,13 +49,13 @@ static int compare(const char *pattern, const char *string){
 	return compare(pattern, string+1);
 }
 // exclude from the list by compare the name with the pattern
-struct list* chck_ls(struct list *raw_list, const char * pattern) {
+struct list* chck_ls(struct list *raw_list, const char *pattern) {
   struct list *first, *prew = NULL, *tmp, *current;
   char *string;
   first = current = raw_list;			/* begin of list */
   while(current){ 						/* != NULL */
     string = current -> content;		/* set file name */
-    if(compare(pattern, string) == 0){ 	/* not rrmap */
+    if(compare(pattern, string) == 0){ 	/* not pattern */
       if(prew)							/* prew != NULL */
   	    prew -> next = current -> next;	  
       if(current == first)				
@@ -82,4 +69,33 @@ struct list* chck_ls(struct list *raw_list, const char * pattern) {
     }
   }
   return first;
+}
+/* Just create the list of options 
+ * use char* as function param */
+struct list* form_list(int qt, ...){    
+  va_list option;
+  struct list *tmp, *prew = NULL, *first = NULL;
+  va_start(option, qt); /* set pointer at 1st param*/
+  for(int i = 0; i < qt; i++) {
+	tmp = malloc(sizeof(struct list));
+	tmp -> content = malloc(260); /* can be used as filename */
+	strcpy (tmp -> content, va_arg(option, char*));
+	tmp -> next = NULL;
+	if(!first)
+	  first = tmp; /* points at the first node in the list */
+	if(prew)                 /* is prew not NULL already ? */
+	  prew -> next = tmp;
+	prew = tmp;             /*  */
+  }
+  return first;
+}
+//Return the content of the pointed inode (serial [ 0; quantity of inodes - 1 ])
+char* retrive_content(int serial, struct list *first){
+	struct list *tmp;
+	tmp = first;
+	for(int i = 0;;i++){
+	  if(i==serial)
+		return tmp -> content;
+	  tmp = tmp -> next;
+	}
 }

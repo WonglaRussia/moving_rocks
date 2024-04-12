@@ -4,14 +4,17 @@ git switch <branch name>
 
 git reset --hard main
 
-#Take all commitments
-git log
-git log --reflog
-
-#To take commitments ID in logs
+#!!!To take commitments ID in logs
 git log --oneline
 #To restore the file using cimmitment ID
 git restore --source=ed6af22 menu_start.c
+#To show file from the commitmnet
+git show <ID>:<file_path>
+git show 506a946:menu.c
+
+#Take all commitments
+git log
+git log --reflog
 
 #Logs of the file / directory
 git log -p file.c
