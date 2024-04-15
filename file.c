@@ -81,3 +81,5 @@ struct list* ls_dr(const char *dr_nm, const char *pattern){
 	first = chck_ls(first, pattern);
 	return first;
 }
+
+//int save_player()

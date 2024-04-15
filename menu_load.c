@@ -22,8 +22,8 @@
 	}
 	tmp -> next = form_list(1,"Main menu");
 	qt = count_list(options) - 1;
-	clear();	
 	for(;;){
+	  clear();
 	  choosen_position = menu(options); 
 	  if(choosen_position == qt)
 		return 0;
