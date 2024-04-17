@@ -3,7 +3,7 @@
 #include <stdlib.h>		//malloc();
 #include <string.h>		//strlen();strcpy();
 #include <stdarg.h>		//va_list va_start va_arg
-#include "file.h"		//load_map();
+#include "file.h"		//load_map(); append_data()
 #include "mapping.h"	//WA_L SPACE ROCK HOLE e.t.c
 
 /* REWRITE
@@ -141,18 +141,16 @@ static void ask_file_name(char *file_name) {
 }
 //campaign_name - name of the file, y, x - user position.
 static void save(int map[MAP_ROWS][MAP_ROWS], char *campaign_name, int y, int x) {
-	char *file_extention = ".rrmap";
 	if(check_map(map) == 0) {
 //Change the name?
 	  ask_file_name(campaign_name);  
 //Fill full file_name
-	  char *file_campaign = malloc(strlen(campaign_name) + strlen(file_extention) + 1);
+	  char *file_campaign = malloc(strlen(campaign_name) + 1);
 	  strcpy(file_campaign, campaign_name);
-	  strcat(file_campaign, file_extention);
 //Put the user on the map
 	  map[y][x] = '@';
 //Try to save the map.
-	  if (append_map_to_the_file(map, file_campaign) == -1) {  
+	  if (append_data(map, 2500, "./maps/", file_campaign, ".rrmap") == -1){  
 		shw_msg(1,"Something went wrong while opening the file!");
 		getch();
 	  } else {

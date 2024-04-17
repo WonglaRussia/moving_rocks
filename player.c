@@ -1,6 +1,10 @@
 /* player.c */
 
+
 #include <stdlib.h>			/* malloc() */
+#include <string.h>			/* memset() */
+#include <unistd.h>			//open() close()
+#include <fcntl.h>			//file options O_RDONLY e.t.c.
 
 #include "mapping.h"		/* defines MAP_ROWS */
 
@@ -44,7 +48,7 @@ struct progress {
 Player contains list of progress (campaigns)
 */
 struct player {
-	char *name;
+	char *name[255];
 	struct progress *progress_list;
 	struct player *next;
 }
@@ -61,4 +65,32 @@ int create_player(char *player_name) {
 	}
 	free(tmp);
 	return 0;
+}
+//declare function before
+int save_player(struct player current_player) {
+	char *file_name;
+	char *path = "./players/";
+	char *extention =".pplayer"
+	int file_descriptor;
+	int len
+	
+	file_name =	malloc(260);
+	memset(file_name, 0, sizeof(file_name)); /* REWRITE check if it is not necessary */
+	strcat(file_name, path);
+	strcat(file_name, current_player -> name);
+	strcat(file_name, extention);
+	len = sizeof(struct player*);
+	file_descriptor = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	if(file_descriptor == -1) {
+	  perror("while open file for writing!");
+	  close(file_descriptor);
+	  return -1;	
+	} 
+	else if(len != write(file_descriptor, current_player, len)){
+	  perror("Error while writing in file!");
+	  return -1;
+	}
+	if (close(file_descriptor) == 0)
+	  perror("File closed with errors!");
+	free(file_name);
 }

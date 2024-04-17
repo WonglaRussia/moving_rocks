@@ -8,11 +8,11 @@
 #include <dirent.h>			//opendir(), readdir()
 #include <stdlib.h>			//malloc()
 #include <string.h>			//strcpy()
-
+#include <ncurses.h>
 #include "list.h"			//struct list; chck_ls();
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2
-
+/*
 int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name){
 	int file_descriptor;
 	int len = SIZE_OF_A_MAP;
@@ -31,6 +31,42 @@ int append_map_to_the_file(int current_map[][MAP_ROWS], char *file_name){
 		perror("File closed with warnings.");
 	return 0;
 }
+*/
+int append_data(void *pointer, int len, char *folder_path, char *file_name, char *extention){
+	int file_descriptor;
+	char *full_name = malloc(260);
+	
+	memset(full_name, 0, 260); /* REWRITE check if it is not necessary */
+	strcat(full_name, folder_path);
+	strcat(full_name, file_name);
+	strcat(full_name, extention);
+	
+	file_descriptor = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	printw("%s",full_name);
+	getch();
+	if (file_descriptor == -1 ) {
+		
+		perror("Erorr occured while opening the file");
+		close(file_descriptor);
+		free(full_name);
+		return -1;
+	}
+	else if(len != write(file_descriptor, pointer, len)){
+		perror("Erorr occured while writing to the file");
+		close(file_descriptor);
+		free(full_name);
+		return -1;
+	}
+	if (close(file_descriptor) == 0) {
+	  perror("File closed with warnings.");
+	  free(full_name);
+	  return -1;
+	}
+	free(full_name);
+	return 0;
+}
+
+
 //Loads the map from the file to current_map. The first round is 0.
 int load_map(int current_map[][MAP_ROWS], char *file_name, const int round_number){
 	int file_descriptor;
@@ -81,5 +117,3 @@ struct list* ls_dr(const char *dr_nm, const char *pattern){
 	first = chck_ls(first, pattern);
 	return first;
 }
-
-//int save_player()
