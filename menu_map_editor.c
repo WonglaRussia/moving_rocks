@@ -10,7 +10,7 @@
  * Add load map. 
  * Add saving to the certain round position (not append only)*/
 
-//Jist show the list of messages. q = how many strings.
+//Show the list of messages. q = how many strings.
 static void shw_msg(int q, ...){
 	char *tmp;
 	int row, col;
@@ -137,27 +137,24 @@ static void ask_file_name(char *file_name) {
 	  move((max_row/2) + 1, (max_col/2)-(strlen(notification)/2) );
 	  getstr(file_name);
 	}
+	shw_msg(2, file_name," is saved.");
 	return;
 }
 //campaign_name - name of the file, y, x - user position.
 static void save(int map[MAP_ROWS][MAP_ROWS], char *campaign_name, int y, int x) {
 	if(check_map(map) == 0) {
 //Change the name?
-	  ask_file_name(campaign_name);  
-//Fill full file_name
-	  char *file_campaign = malloc(strlen(campaign_name) + 1);
-	  strcpy(file_campaign, campaign_name);
+	  ask_file_name(campaign_name); 
 //Put the user on the map
 	  map[y][x] = '@';
 //Try to save the map.
-	  if (append_data(map, 2500, "./maps/", file_campaign, ".rrmap") == -1){  
+	  if (append_data(map, 2500, "./maps/", campaign_name, ".rrmap") == -1){  
 		shw_msg(1,"Something went wrong while opening the file!");
 		getch();
 	  } else {
 		shw_msg(1,"Saved!");
 		getch();
 	  }
-	  free(file_campaign);
 	  map[y][x] = SPACE;
 	}
 	else {

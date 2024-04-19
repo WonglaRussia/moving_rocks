@@ -16,4 +16,6 @@ struct list* chck_ls(struct list *raw_list, const char * pattern);
 struct list* form_list(int qt, ...);
 //Return the content of the pointed inode (serial [ 0; quantity of inodes - 1 ])
 char* retrive_content(int serial, struct list *first);
+// if the pattern is in the string; 1 = match;
+int compare(const char *pattern, const char *string);
 #endif

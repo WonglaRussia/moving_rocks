@@ -35,7 +35,7 @@ int free_list(struct list *flist) {
 	return 0;
 }
 // check if the pattern is in the string; 1 = match;
-static int compare(const char *pattern, const char *string){
+int compare(const char *pattern, const char *string){
 	if(pattern[0] == 0)
 	  return 1; 	/* walked through all the pattern already */
 	else

@@ -20,7 +20,7 @@
 	while(tmp->next){		
 	  tmp = tmp -> next;
 	}
-	tmp -> next = form_list(1,"Main menu");
+	tmp -> next = form_list(1,"MAIN MENU");
 	qt = count_list(options) - 1;
 	for(;;){
 	  clear();
@@ -29,6 +29,7 @@
 		return 0;
 	  else {
 	    file_name = retrive_content(choosen_position, options);
+		clear();
 		start_game(file_name);
 	  }
 	}
