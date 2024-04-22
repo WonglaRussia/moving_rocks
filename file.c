@@ -5,6 +5,7 @@
 #include <unistd.h>			//open() close() lseek() fsync()
 #include <fcntl.h>			//file options O_RDONLY e.t.c.
 #include <sys/types.h>
+#include <sys/stat.h>		/* mmap() */
 #include <dirent.h>			//opendir(), readdir()
 #include <stdlib.h>			//malloc()
 #include <string.h>			//strcpy()
@@ -13,18 +14,23 @@
 
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2 REWRITE
+/*  */
+void concatinate_path(char *folder_path, char *file_name, char *extention, char *full_name, int len) {
+	memset(full_name, 0, len);
+	strcat(full_name, folder_path);
+	strcat(full_name, file_name);
+	strcat(full_name, extention);
+	return;
+}
 
 /* pointer to data, foleder path like "./maps/" extention like ".rrmap" */
 int append_data(void *pointer, int len, char *folder_path, char *file_name, char *extention){
 	int file_descriptor;
 	char *full_name = malloc(260);
 	
-	memset(full_name, 0, 260); /* REWRITE check if it is not necessary */
-	strcat(full_name, folder_path);
-	strcat(full_name, file_name);
-	strcat(full_name, extention);
-	
+	concatinate_path(folder_path, file_name, extention, full_name, 260);
 	file_descriptor = open(full_name, O_RDWR | O_CREAT | O_APPEND | O_NONBLOCK, 0666);
+	
 	if (file_descriptor == -1 ) {
 		perror("Erorr occured while opening the file");
 		close(file_descriptor);
@@ -95,26 +101,36 @@ struct list* ls_dr(const char *dr_nm, const char *pattern){
 	return first;
 }
 
-
-// Rewrite the file partially, offset from the file begining. -1 - error.
-int rewrite_data(int offset, int len, void *data, char *folder, char *file_name, char *extention) {
-	int file_descriptor();
-	char full_name[260];
-	memset(full_name, 0, 260);
-	strcat(full_name, folder);
-	strcat(full_name, file_name);
-	strcat(full_name, extention);
+struct player* mmap_user(char *user_name){
+	char *path = "./players/";
+	char *extention = ".pplayer";
+	char *full_f_name[260];
+	int fd, page_size, len;
+	struct stat *file_stat;
+	struct player *tmp_player;
 	
-	if((file_descriptor = open(file_name, O_RDWR | O_CREAT | O_NONBLOCK)) == -1) {
-		perror("Can`t open the file.");
-		close(file_descriptor);
-		return -1;
+	file_stat = malloc(sizeof(struct stat));
+	concatinate_path(folder, file_name, extention, full_name, 260);
+	
+	if ((fd = open(full_f_name, O_RDWR | O_CREAT | O_APPEND | O_NONBLOCK, 0666)) == -1) {
+	  perror("Error while opening the player file");
+	  return NULL;
 	}
-	lseek(file_descriptor, offset, SEEK_SET);
-	if (len != write(file_descriptor, data, len)) {
-		perror("Error in writing to the file!");
-		close(file_descriptor);
+	fstat(fd,file_stat);
+	
+	page_size = getpagesize();
+	len = ((file_stat -> st_size) / page_size + 1) * page_size;
+	 
+	tmp_player = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	if (tmp_player == MAP_FAILED) {
+	  perror("Error while mapping player file");
+	  return NULL;
 	}
-	close (file_descriptor);
-	return 0;
+	free(file_stat);
+	return tmp_player;
+}
+
+int free_user(struct player *cur_player) {
+	free(cur_player);
+	
 }

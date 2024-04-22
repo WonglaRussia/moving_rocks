@@ -5,7 +5,7 @@
 #include <fcntl.h>			//file options O_RDONLY e.t.c.
 
 #include "mapping.h"		/* defines MAP_ROWS */
-
+#include "list.h"			/* compare() */
 
 
 /* Progress */
@@ -28,10 +28,22 @@ struct player {
 	char *name[50];
 	struct progress *progress_list;
 }
-/* saves player struct in file
- * to the folder ./players/
- * file name and user name both are the same
-*/
+int pick_up_prog(char *player_name, char *campaign_name, struct progress *saved_camp){
+	
+}
+
+
+int add_prog(char *player_name, char *campaign_name, struct progress *saved_camp){
+
+
+}
+
+int remove_prog(char *player_name, char *campaign_name) {
+  
+  return 0;
+}
+
+int change_prog()
 
 /* Saves sruct player in the file */
 static int save_player(struct player *current_player) {
@@ -80,13 +92,15 @@ int create_player(char *player_name) {
 	return 0;
 }
 
-static int add_progress(char *player_name, int rnd, int map[MAP_ROWS][MAP_ROWS], int scr){
-  struct player *tmp; 
+static int save_progress(char *player_name, int rnd, int map[MAP_ROWS][MAP_ROWS], int scr){
+  struct player *tmp;
   tmp = malloc(sizeof struct player);
+  int offset, len
+  len = sizeof(struct progress);
+  offset = sizeof(struct player); /* File consist of struct player + structs of progress */
+  void *data
+  rewrite_data(int offset, int len, void *data, "./players/", char *file_name, ".player");
   
-  return 0;
-}
-static remove_progress(char *player_name, char *campaign_name) {
   
   return 0;
 }
