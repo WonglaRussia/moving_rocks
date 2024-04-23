@@ -5,7 +5,7 @@ git switch <branch name>
 git reset --hard main
 
 #!!!To take commitments ID in logs
-git log --oneline
+git log --online
 #To restore the file using cimmitment ID
 git restore --source=ed6af22 menu_start.c
 #To show file from the commitmnet

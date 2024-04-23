@@ -14,6 +14,13 @@
 
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2 REWRITE
+
+static void err_sys(const char* x, int err_no)
+{
+    perror(x);
+    return err_no;
+}
+
 /*  */
 void concatinate_path(char *folder_path, char *file_name, char *extention, char *full_name, int len) {
 	memset(full_name, 0, len);
@@ -101,36 +108,32 @@ struct list* ls_dr(const char *dr_nm, const char *pattern){
 	return first;
 }
 
-struct player* mmap_user(char *user_name){
+struct player* mmap_user(char *user_name, int *file_descriptor,){
 	char *path = "./players/";
 	char *extention = ".pplayer";
 	char *full_f_name[260];
-	int fd, page_size, len;
+	int page_size, len;
 	struct stat *file_stat;
 	struct player *tmp_player;
 	
 	file_stat = malloc(sizeof(struct stat));
 	concatinate_path(folder, file_name, extention, full_name, 260);
 	
-	if ((fd = open(full_f_name, O_RDWR | O_CREAT | O_APPEND | O_NONBLOCK, 0666)) == -1) {
-	  perror("Error while opening the player file");
-	  return NULL;
-	}
-	fstat(fd,file_stat);
+	if ((*file_descriptor = open(full_f_name, O_RDWR | O_CREAT | O_APPEND | O_NONBLOCK, 0666)) == -1) 
+	  err_sys("Error while opening the player file", -1)
+	fstat(*file_descriptor,file_stat);
 	
 	page_size = getpagesize();
 	len = ((file_stat -> st_size) / page_size + 1) * page_size;
 	 
-	tmp_player = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-	if (tmp_player == MAP_FAILED) {
-	  perror("Error while mapping player file");
-	  return NULL;
-	}
+	tmp_player = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED, *file_descriptor, 0);
+	if (tmp_player == MAP_FAILED)
+	  err_sys("Error while mapping player file");
 	free(file_stat);
 	return tmp_player;
 }
 
-int free_user(struct player *cur_player) {
-	free(cur_player);
-	
+int free_mmaped_player(struct player *cur_player, int file_descriptor) {
+	munmap(cur_player);
+	close(file_descriptor);
 }
