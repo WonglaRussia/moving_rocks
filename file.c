@@ -15,8 +15,7 @@
 #include "mapping.h"		//define MAP_ROWS
 #define SIZE_OF_A_MAP 2500	//bytes (int size) * MAP_ROWS ^ 2 REWRITE
 
-static void err_sys(const char* x, int err_no)
-{
+void err_sys(const char* x, int err_no){
     perror(x);
     return err_no;
 }
@@ -108,7 +107,9 @@ struct list* ls_dr(const char *dr_nm, const char *pattern){
 	return first;
 }
 
-struct player* mmap_user(char *user_name, int *file_descriptor,){
+/* MAP player file to the memory location.
+ * File descriptor == NULL if file is not opened yet*/
+struct player* mmap_user(char *user_name, int *file_descriptor){
 	char *path = "./players/";
 	char *extention = ".pplayer";
 	char *full_f_name[260];
@@ -117,10 +118,13 @@ struct player* mmap_user(char *user_name, int *file_descriptor,){
 	struct player *tmp_player;
 	
 	file_stat = malloc(sizeof(struct stat));
-	concatinate_path(folder, file_name, extention, full_name, 260);
+	concatinate_path(folder, user_name, extention, full_name, 260);
 	
-	if ((*file_descriptor = open(full_f_name, O_RDWR | O_CREAT | O_APPEND | O_NONBLOCK, 0666)) == -1) 
-	  err_sys("Error while opening the player file", -1)
+	if(!file_descriptor) {
+	  if ((*file_descriptor = open(full_f_name, O_RDWR | O_CREAT | O_APPEND | O_NONBLOCK, 0666)) == -1) 
+	    err_sys("Error while opening the player file", -1)
+	}
+	
 	fstat(*file_descriptor,file_stat);
 	
 	page_size = getpagesize();
@@ -131,9 +135,4 @@ struct player* mmap_user(char *user_name, int *file_descriptor,){
 	  err_sys("Error while mapping player file");
 	free(file_stat);
 	return tmp_player;
-}
-
-int free_mmaped_player(struct player *cur_player, int file_descriptor) {
-	munmap(cur_player);
-	close(file_descriptor);
 }

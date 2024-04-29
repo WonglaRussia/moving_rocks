@@ -6,13 +6,13 @@
 
 #include "mapping.h"		/* defines MAP_ROWS */
 #include "list.h"			/* compare() */
-
+#include "file.h"			/* err_sys() concatinate_path() mmap_user() */
 
 /* Progress */
 struct progress {
-	//file name of the campaign file whithout path and extention
+	//Name of the campaign file whithout path and extention.
 	char *FileName;
-	//last round is not finished
+	//The last round is not finished yet
 	unsigned int round;
 	//last map must be fetched while loading
 	int last_map[MAP_ROWS][MAP_ROWS];
@@ -28,71 +28,61 @@ struct player {
 	char *name[50];
 	struct progress *progress_list;
 }
+
 int pick_up_prog(char *player_name, char *campaign_name, struct progress *saved_camp){
 	
 }
-
-
-int add_prog(char *player_name, char *campaign_name, struct progress *saved_camp){
-
-
-}
-
-int remove_prog(char *player_name, char *campaign_name) {
+//File descripror will be changed
+int add_prog(char *player_name, char *campaign_name, int *file_descriptor){
   
   return 0;
 }
 
-int change_prog()
+int remove_prog(char *player_name, char *campaign_name, int *file_descriptor) {
+  
+  return 0;
+}
+
+int change_prog(char *player_name, char *campaign_name, const int *file_descriptor) {
+  
+  return 0;
+}
+/*  */
+int load_prog(){
+	
+}
 
 /* Saves sruct player in the file */
-static int save_player(struct player *current_player) {
+static int create_player(char *player_name) {
 	char *file_name;
 	char *path = "./players/";
 	char *extention =".pplayer"
 	int file_descriptor;
 	int len
+	struct player *current_player;
 	
 	len = sizeof(struct player*);
+	current_player = malloc(len);
 	file_name =	malloc(260);
-	memset(file_name, 0, sizeof(file_name)); /* REWRITE check if it is not necessary */
-	
-	/* path(folder) + file name + file extention */
-	strcat(file_name, path);
-	strcat(file_name, current_player -> name);
-	strcat(file_name, extention);
-	/* Open to write */
-	file_descriptor = open(file_name, O_RDWR | O_CREAT | O_APPEND, 0777);
-	
-	if(file_descriptor == -1) {
-	  perror("while open file for writing!");
-	  close(file_descriptor);
-	  return -1;	
-	} 
-	else if(len != write(file_descriptor, current_player, len)){
-	  perror("Error while writing in file!");
-	  return -1;
-	}
+	concatinate_path(path, player_name, extention, file_name, 260)
+	memset(current_player -> name, 0, 50); 			/* REWRITE 50 */
+	memset(current_player -> progress_list, 0, sizeof(current_player -> progress_list));
+	strcat(current_player -> name, player_name);	/* Set name */
+
+	file_descriptor = open(file_name, O_RDWR | O_CREAT | O_APPEND, 0666);
+	free(file_name);
+	if(file_descriptor == -1)
+	  err_sys("while open file for writing!", -1);
+	else if(len != write(file_descriptor, current_player, len))
+	  err_sys("Error while writing in file!", -1);
 	if (close(file_descriptor) == 0)
 	  perror("File closed with errors!");
-	free(file_name);
+	
 	return 0;
 }
 
-int create_player(char *player_name) {
-	struct player *tmp;
-	tmp = malloc(sizeof(struct player));
-	tmp -> name = *player_name;
-	tmp -> progress = NULL;
-	if (save_player(tmp) = 0){
-	  free(tmp);
-	  return 1;
-	}
-	free(tmp);
-	return 0;
-}
-
-static int save_progress(char *player_name, int rnd, int map[MAP_ROWS][MAP_ROWS], int scr){
+//Stash progress
+static int save_progress(char* campaign_name, char *player_name, int rnd, int map[MAP_ROWS][MAP_ROWS], int scr){
   struct player *tmp;
   tmp = malloc(sizeof struct player);
   int offset, len
